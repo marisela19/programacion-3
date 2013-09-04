@@ -1,0 +1,229 @@
+import java.awt.*; 
+import java.awt.event.*;
+import javax.swing.*;
+import java.io.*;
+
+public class Editor implements ActionListener, ItemListener{
+	int es = 0,t = 12;
+	TextArea ta;
+	String cad;
+	JFrame f;
+	MenuBar mb;
+	Menu archivo, edicion;
+	MenuItem nuevo,guardarcomo , abrir,copiar, pegar, guardar, cortar;
+	Panel p;
+	Button neg, ita, G, A;
+	Choice tam, ti;
+	String tip = "SanSerif";
+	FileDialog fd;
+    String ruta;
+    boolean guardado;
+	
+	public Editor(){
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		guardado = false;
+		f = new JFrame("Mi Editor");
+		mb = new MenuBar();
+		archivo = new Menu("Archivo");
+		edicion = new Menu("Edicion");
+		nuevo = new MenuItem("Nuevo");
+		guardarcomo = new MenuItem("Guardar Como..."); 
+		guardar = new MenuItem("Guardar");
+		
+		abrir = new MenuItem("Abrir"); 
+		copiar = new MenuItem("Copiar"); 
+		pegar = new MenuItem("Pegar"); 
+		cortar = new MenuItem("Cortar"); 
+		ta = new TextArea();
+		p = new Panel();
+		tam = new Choice();
+		ti = new Choice(); 
+		ita = new Button ("I");
+		neg = new Button("N");
+		//neg.setFont();
+		
+		G=new Button("Guardar"); 
+	    A=new Button("Abrir");  
+	    
+	    nuevo.addActionListener(this);
+	    guardarcomo.addActionListener(this);
+	    guardar.addActionListener(this);
+	    abrir.addActionListener(this);
+	    copiar.addActionListener(this);
+	    pegar.addActionListener(this);
+	    cortar.addActionListener(this);
+	    ita.addActionListener(this);
+	    G.addActionListener(this);
+	    A.addActionListener(this);
+	    tam.addItemListener(this);
+	    ti.addItemListener(this);
+	    neg.addActionListener(this);
+	    
+		p.add(G);
+		p.add(A);
+		p.add(neg);
+		p.add(ita);
+		p.add(tam);
+		p.add(ti);
+		tam.add("12");
+		tam.add("16");
+		tam.add("20");
+		tam.add("30");
+		ti.add("SanSerif");
+		ti.add("Serif");
+		ti.add("Monospace");
+		ti.add("DialogInput");
+		
+		f.setMenuBar(mb);
+		mb.add(archivo);
+		mb.add(edicion);
+		archivo.add(nuevo);
+		archivo.add(abrir);
+		archivo.add(guardar);
+		archivo.add(guardarcomo);
+		edicion.add(cortar);
+		edicion.add(copiar);
+		edicion.add(pegar);
+		f.add(ta);
+		f.add(p,BorderLayout.NORTH);
+		f.setSize(450,500);
+		f.setVisible(true);
+	}
+	
+		
+	
+	private void setDefaultCloseOperation(int exitOnClose) {
+		}
+
+	void copiaArchivo(){
+	   
+        try {	
+                ruta=fd.getDirectory()+fd.getFile();
+           
+                File outputFile = new File(ruta);
+                FileOutputStream fos=new FileOutputStream(outputFile);
+	
+		DataOutputStream dos = new DataOutputStream(fos);
+		
+		dos.writeBytes(ta.getText());
+
+		dos.close();
+		guardado = true;
+
+        } catch (FileNotFoundException e) {
+            System.err.println("FileStreamsTest: " + e);
+        } catch (IOException e) {
+            System.err.println("FileStreamsTest: " + e);
+        }   
+  }  
+	
+	
+	void abrirArchivo(){
+		ta.setText("");
+		String c;
+		 try { 
+		ruta=fd.getDirectory()+fd.getFile();
+		 
+		File inputFile = new File(ruta);
+		 FileInputStream fos=new FileInputStream(inputFile);
+		 
+		DataInputStream dos = new DataInputStream(fos);
+		 
+		while ((c= dos.readLine()) != null)
+			
+
+		 ta.setText((ta.getText()+"\n"+c)); dos.close(); 
+		 guardado = true;
+		 } catch (FileNotFoundException e) {
+		 System.err.println("FileStreamsTest: " + e);
+		 } catch (IOException e) {
+		 System.err.println("FileStreamsTest: " + e);
+		 } 
+
+		 
+		 } 
+	
+	
+
+	public void actionPerformed(ActionEvent ae){
+		if(ae.getSource().equals(copiar))
+			cad = ta.getSelectedText();
+		else if(ae.getSource().equals(pegar))
+			ta.insert(cad, ta.getCaretPosition());
+		else if (ae.getSource().equals(cortar))
+		{cad = ta.getSelectedText();
+		ta.replaceRange("", ta.getSelectionStart(), ta.getSelectionEnd());
+		}
+		else if (ae.getSource().equals(neg))
+			es=1;
+		else if (ae.getSource().equals(ita))
+			es=2;
+		ta.setFont(new Font (tip,es,t));
+		
+		 if(ae.getSource().equals(G)){
+	        if(guardado){ 
+			 fd=new FileDialog(f,"Guardar como",FileDialog.SAVE);        
+	        fd.setVisible(true);
+	        }
+	         copiaArchivo();
+	     }
+	      else if(ae.getSource().equals(A)){
+	              fd=new FileDialog(f,"Abrir",FileDialog.LOAD);        
+	              fd.setVisible(true);abrirArchivo();
+	      }     else if(ae.getActionCommand()=="Abrir"){  
+	    	  		System.out.println("entrar a Abrir");
+	                  }
+		 if(ae.getSource().equals(guardar)){
+			  
+			 fd=new FileDialog(f,"Guardar como...",FileDialog.SAVE);        
+		        fd.setVisible(true);
+			 
+		         copiaArchivo();
+		     }
+		      else if(ae.getSource().equals(abrir)){
+		              fd=new FileDialog(f,"Abrir",FileDialog.LOAD);        
+		              fd.setVisible(true);abrirArchivo();
+		      }     else if(ae.getActionCommand()=="Abrir"){  
+		    	  			System.out.println("entro a Abrir");
+		                  }
+		 if(ae.getSource().equals(guardar)){
+		        if(guardado){ 
+				 fd=new FileDialog(f,"Guardar",FileDialog.SAVE);        
+		        fd.setVisible(true);
+		        }
+		         copiaArchivo();
+		     }
+		      else if(ae.getSource().equals(nuevo)){
+		    	  ta.setText("");
+		      }
+		 
+	}
+	
+	public void itemStateChanged(ItemEvent e){
+		if(e.getItem()=="12")
+			t = 12;
+		else if(e.getItem()=="16")
+			t = 16;
+		else if(e.getItem()=="20")
+			t = 20;
+		else if(e.getItem()=="30")
+			t = 30;
+		else if(e.getItem()=="SanSerif")
+			tip = "SanSerif";
+		else if(e.getItem()=="Serif")
+			tip = "Serif";
+		else if(e.getItem()=="Monospace")
+			tip = "Monospace";
+		else if(e.getItem()=="DialogInput")
+			tip = "DialogInput";
+		
+		ta.setFont(new Font (tip,es,t));
+		
+	}
+
+	public static void main(String[] args) {
+		Editor e = new Editor();
+
+	}
+
+}
