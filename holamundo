@@ -1,0 +1,21 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class Calculadora implements ActionListener{
+	
+	JFrame frame;
+	JPanel panelSuperior, panelInferior;
+	JButton botoninf[];
+	JTextField pantalla;
+	boolean punto=false,eop1=false;
+	char opr;
+	double op1=0,op2=0,r=0;
+	
+	
+	public Calculadora(){
+		PanelSuperior();
+		PanelInferior();
+		Ventana();
+		}
