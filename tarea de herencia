@@ -1,0 +1,38 @@
+using System;
+    
+    namespace TestConsole
+    {
+
+    	 public class Casa : Persona{
+     
+       //Notice there is no (string Name) ctor;
+    	}
+  
+   
+   public Casa (String nombre , DateTime Fecha de Nacimiento ):Persona ( Nombre, Fecha de Nacimiento ) { }
+   
+   public  Casa (String nombre , DateTime Fecha de Nacimiento , DateTime DeathDate ):Persona ( Nombre, Fecha de Nacimiento )
+    {
+    / / Nombre y Fecha de Nacimiento se establecerán en la base ctor
+    base.DeathDate = DeathDate ;
+    }
+   
+    public override string Name
+    {
+    get {return string.Format ( " figura histórica \"{ 0 }\"", base.Name ) ;}
+    set { base.Name = valor; }
+   }
+  
+  
+
+    public override string HowOld ()
+    {
+    if ( DeathDate == DateTime.MinValue )
+    return base.HowOld ( ) ;
+    persona
+    	else
+    	(return string.Format ("{ 0 } { 1 } murió , y fue { 2 } años. " , Nombre, DeathDate.ToShortDateString (), yearsold )) ;
+   }
+   
+   }
+    
